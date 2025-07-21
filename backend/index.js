@@ -8,7 +8,7 @@ app.use(express.json());
 
 app.use(cors({
     origin: [
-        "https://netflixclone-orcin-nine.vercel.app",
+        "https://netflix-clone-login-page-fu3v.vercel.app/",
         "http://localhost:5173"
     ],
     methods: ["GET", "POST"],
