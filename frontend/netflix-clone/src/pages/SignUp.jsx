@@ -30,7 +30,7 @@ function Signup() {
     }
 
     try {
-      const res = await axios.post("https://netflix-login-clone-backend.onrender.com/signup", {
+      const res = await axios.post("https://netflix-clone-login-page-3.onrender.com/signup", {
         email,
         password: pass,
       });
