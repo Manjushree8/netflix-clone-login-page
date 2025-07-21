@@ -1,9 +1,8 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import axios from "axios";
 import netflixLogo from "../images/Netflixlogo.png";
 import loginbg from "../images/loginbg.jpg";
-
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -21,125 +20,84 @@ function Login() {
     setError("");
 
     if (!email || !pass) {
-        setError("Please fill in all fields.");
-        return;
+      setError("Please fill in all fields.");
+      return;
     }
 
     if (!validateEmail(email)) {
-        setError("Please enter a valid email address.");
-        return;
+      setError("Please enter a valid email address.");
+      return;
     }
 
     try {
-        const res = await axios.post("https://netflix-clone-1p4s.onrender.com/login", {
-    email,
-    password: pass
-});
+      const res = await axios.post("https://netflix-clone-1p4s.onrender.com/login", {
+        email,
+        password: pass,
+      });
 
-
-        if (res.data.success) {
-            navigate("/dashboard");
-        } else {
-            setError(res.data.message);
-        }
+      if (res.status === 200 && res.data.success) {
+        navigate("/dashboard");
+      } else {
+        setError(res.data.message || "Login failed. Please try again.");
+      }
     } catch (error) {
-        setError(error.response?.data?.message || "Server error. Please try again later.");
+      if (error.response && error.response.data && error.response.data.message) {
+        setError(error.response.data.message);
+      } else {
+        setError("Server error. Please try again later.");
+      }
     }
-}
-
-    return (
-      <div className="relative min-h-screen flex flex-col items-center justify-center overflow-x-hidden">
-        <img
-          src={loginbg}
-          alt="Background"
-          className="hidden sm:block fixed inset-0 w-full h-full object-cover -z-10"
-        />
-        <div className="fixed inset-0 bg-black bg-opacity-100 sm:bg-opacity-70 -z-10"></div>
-
-        <img
-          src={netflixLogo}
-          alt="Netflix Logo"
-          className="absolute top-0 left-2 sm:left-2 md:left-6 lg:left-48 w-32 sm:w-36 md:w-44 z-20"
-
-        />
-
-        <div className="relative z-30 bg-black bg-opacity-55 text-white p-8 sm:p-12 rounded max-w-lg w-[95%] sm:w-[450px] mt-16">
-          <h1 className="text-3xl sm:text-4xl font-bold mb-6">Sign In</h1>
-          {error && <p className="text-[#e87c03] text-sm mb-3">{error}</p>}
-          <form onSubmit={handleSubmit} className="flex flex-col space-y-4">
-            <input
-              type="email"
-              placeholder="Email or mobile number"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="bg-[#333] p-4 rounded text-white placeholder-[#b3b3b3] border border-[#8c8c8c] focus:outline-none focus:border-[#e50914]"
-            />
-            <input
-              type="password"
-              placeholder="Password"
-              value={pass}
-              onChange={(e) => setPass(e.target.value)}
-              className="bg-[#333] p-4 rounded text-white placeholder-[#b3b3b3] border border-[#8c8c8c] focus:outline-none focus:border-[#e50914]"
-            />
-            <button
-              type="submit"
-              className="bg-[#e50914] hover:bg-[#f6121d] p-4 rounded font-semibold text-white text-lg transition"
-            >
-              Sign In
-            </button>
-            <div className="flex justify-center text-[#b3b3b3]">OR</div>
-            <button
-              type="button"
-              className="bg-[#333] hover:bg-neutral-600 p-4 rounded font-semibold text-white text-center border border-[#8c8c8c]"
-            >
-              Use a sign-in code
-            </button>
-            <div className="flex justify-between items-center text-sm text-[#b3b3b3]">
-              <div className="flex items-center space-x-2">
-                <input type="checkbox" className="accent-white w-4 h-4" />
-                <span>Remember me</span>
-              </div>
-              <a href="#" className="hover:underline">
-                Forgot password?
-              </a>
-            </div>
-          </form>
-          <div className="text-[#737373] mt-6 text-sm">
-            New to Netflix?{" "}
-           <a href="/signup" className="text-white hover:underline">
-    Sign up now.
-</a>
-          </div>
-          <p className="text-[#8c8c8c] mt-4 text-xs">
-            This page is protected by Google reCAPTCHA to ensure you're not a bot.
-            <a href="#" className="text-[#0071eb] hover:underline ml-1">
-              Learn more.
-            </a>
-          </p>
-        </div>
-
-        <footer className="w-full bg-[#111] text-white text-sm px-6 py-10 mt-12">
-          <div className="max-w-4xl mx-auto flex flex-col gap-6">
-            <p>Questions? Call 000-800-919-1743 (Toll-Free)</p>
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-              <a href="#" className="underline">FAQ</a>
-              <a href="#" className="underline">Help Centre</a>
-              <a href="#" className="underline">Terms of Use</a>
-              <a href="#" className="underline">Privacy</a>
-              <a href="#" className="underline">Cookie Preferences</a>
-              <a href="#" className="underline">Corporate Information</a>
-            </div>
-            <div>
-              <button className="flex items-center border border-[#333] px-4 py-2 rounded bg-black text-white hover:bg-[#222]">
-                <span className="mr-2">🌐</span>
-                English
-                <svg xmlns="http://www.w3.org/2000/svg" className="ml-2 h-4 w-4 fill-current" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z" /></svg>
-              </button>
-            </div>
-          </div>
-        </footer>
-      </div>
-    );
   }
 
-  export default Login;
+  return (
+    <div className="relative min-h-screen flex flex-col items-center justify-center overflow-x-hidden">
+      <img
+        src={loginbg}
+        alt="Background"
+        className="hidden sm:block fixed inset-0 w-full h-full object-cover -z-10"
+      />
+      <div className="fixed inset-0 bg-black bg-opacity-100 sm:bg-opacity-70 -z-10"></div>
+
+      <img
+        src={netflixLogo}
+        alt="Netflix Logo"
+        className="absolute top-0 left-2 sm:left-2 md:left-6 lg:left-48 w-32 sm:w-36 md:w-44 z-20"
+      />
+
+      <div className="relative z-30 bg-black bg-opacity-70 text-white p-8 sm:p-12 rounded max-w-lg w-[95%] sm:w-[450px] mt-16">
+        <h1 className="text-3xl sm:text-4xl font-bold mb-6">Sign In</h1>
+        {error && <p className="text-[#e87c03] text-sm mb-3">{error}</p>}
+        <form onSubmit={handleSubmit} className="flex flex-col space-y-4">
+          <input
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className="bg-[#333] p-4 rounded text-white placeholder-[#b3b3b3] border border-[#8c8c8c] focus:outline-none focus:border-[#e50914]"
+          />
+          <input
+            type="password"
+            placeholder="Password"
+            value={pass}
+            onChange={(e) => setPass(e.target.value)}
+            className="bg-[#333] p-4 rounded text-white placeholder-[#b3b3b3] border border-[#8c8c8c] focus:outline-none focus:border-[#e50914]"
+          />
+          <button
+            type="submit"
+            className="bg-[#e50914] hover:bg-[#f6121d] p-4 rounded font-semibold text-white text-lg transition"
+          >
+            Sign In
+          </button>
+        </form>
+        <div className="text-[#737373] mt-6 text-sm">
+          New to Netflix?{" "}
+          <Link to="/signup" className="text-white hover:underline">
+            Sign up now.
+          </Link>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default Login;

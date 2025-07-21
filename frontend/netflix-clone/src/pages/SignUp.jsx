@@ -30,12 +30,12 @@ function Signup() {
     }
 
     try {
-      const res = await axios.post("https://netflix-clone-1p4s.onrender.com/SignUp", {
+      const res = await axios.post("https://netflix-login-clone-backend.onrender.com/signup", {
         email,
         password: pass,
       });
 
-      if (res.status === 201) {
+      if (res.data.success) {
         navigate("/dashboard");
       } else {
         setError("Signup failed. Please try again.");
