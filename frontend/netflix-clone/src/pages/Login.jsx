@@ -30,7 +30,8 @@ function Login() {
     }
 
     try {
-      const res = await axios.post("https://netflix-clone-1p4s.onrender.com/login", {
+           const res = await axios.post("https://netflix-clone-login-page-3.onrender.com/login", {
+
         email,
         password: pass,
       });
